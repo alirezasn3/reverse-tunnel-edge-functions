@@ -1,5 +1,3 @@
-export default async request => {
-  return new Response(JSON.stringify(request), {
-    headers: { 'content-type': 'application/json' }
-  })
+export default async (request, context) => {
+  return new Response(JSON.stringify(request.pathname + ' ' + context.ip))
 }
