@@ -9,6 +9,6 @@ export default async (request, context) => {
     return new Response(port)
   } catch (error) {
     console.log(error)
-    return new Response(context.ip)
+    return new Response(request.headers.get('X-Nf-Client-Connection-Ip'))
   }
 }
