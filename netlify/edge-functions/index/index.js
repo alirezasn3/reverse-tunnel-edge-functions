@@ -1,8 +1,8 @@
 export default async (request, context) => {
   try {
     const { pathname } = new URL(request.url)
-    const [serverIP, clientPort] = pathname.split('-')
-    const res = await fetch(`http://${serverIP}.nip.io/${context.ip}-${clientPort}`)
+    const [serverIP, clientIpAndPort] = pathname.split('-')
+    const res = await fetch(`http://${serverIP}.nip.io/${clientIpAndPort}`)
     const port = await res.text()
     return new Response(port)
   } catch (error) {
