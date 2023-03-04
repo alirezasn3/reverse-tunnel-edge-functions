@@ -1,9 +1,10 @@
 export default async request => {
   try {
     let data = new URL(request.url).pathname.replace('/', '')
-    console.log(request.method, data)
     const [serverIP, ClientIP, ClientPort] = data.split('-')
     const res = await fetch(`http://${serverIP}.nip.io:${request.method == 'GET' ? 80 : 81}/${ClientIP}:${ClientPort}`)
+
+    console.log(request.method, data, res.status)
 
     if (res.status != 200) throw Error()
 
