@@ -2,6 +2,7 @@ export default async (request, context) => {
   try {
     let { pathname } = new URL(request.url)
     pathname = pathname.replace('/', '')
+    console.log(pathname)
     if (pathname.includes('/confirmation')) {
       pathname = pathname.replace('/confirmation', '')
       const [serverIP, clientIpAndPort] = pathname.split('-')
