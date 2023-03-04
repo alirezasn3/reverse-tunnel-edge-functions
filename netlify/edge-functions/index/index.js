@@ -12,7 +12,7 @@ export default async request => {
       return new Response(port)
     }
 
-    return new Response(null)
+    return new Response(null, { status: 200 })
   } catch (error) {
     console.log(error)
     return new Response(null, { status: 400 })
