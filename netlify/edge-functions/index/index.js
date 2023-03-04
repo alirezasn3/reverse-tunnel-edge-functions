@@ -5,8 +5,8 @@ export default async (request, context) => {
     if (pathname.includes('/confirmation')) {
       pathname = pathname.replace('/confirmation', '')
       const [serverIP, clientIpAndPort] = pathname.split('-')
+      console.log(`http://${serverIP}.nip.io:81/${clientIpAndPort}`)
       const res = await fetch(`http://${serverIP}.nip.io:81/${clientIpAndPort}`)
-      console.log(res.status)
       if (res.status === 200) return new Response(null)
       else return new Response(null, { status: 400 })
     } else {
