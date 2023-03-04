@@ -1,21 +1,18 @@
-export default async (request, context) => {
+export default async request => {
   try {
-    let { pathname } = new URL(request.url)
-    pathname = pathname.replace('/', '')
-    console.log(pathname)
-    if (pathname.includes('/confirmation')) {
-      pathname = pathname.replace('/confirmation', '')
-      const [serverIP, clientIpAndPort] = pathname.split('-')
-      console.log(`http://${serverIP}.nip.io:81/${clientIpAndPort}`)
-      const res = await fetch(`http://${serverIP}.nip.io:81/${clientIpAndPort}`)
-      if (res.status === 200) return new Response(null)
-      else return new Response(null, { status: 400 })
-    } else {
-      const [serverIP, clientIpAndPort] = pathname.split('-')
-      const res = await fetch(`http://${serverIP}.nip.io/${clientIpAndPort}`)
+    let data = new URL(request.url).pathname.replace('/', '')
+    console.log(data)
+    const [serverIP, ClientIP, ClientPort] = data.split('-')
+    const res = await fetch(`http://${serverIP}.nip.io:${request.method == 'GET' ? 80 : 81}/${ClientIP}:${ClientPort}`)
+
+    if (res.status != 200) throw Error()
+
+    if (request.method == 'GET') {
       const port = await res.text()
       return new Response(port)
     }
+
+    return new Response(null)
   } catch (error) {
     console.log(error)
     return new Response(null, { status: 400 })
