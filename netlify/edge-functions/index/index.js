@@ -1,18 +1,24 @@
 export default async request => {
   try {
-    let data = new URL(request.url).pathname.replace('/', '')
-    const [serverIP, ClientIP, ClientPort] = data.split('-')
-    const res = await fetch(`http://${serverIP}.nip.io/${ClientIP}:${ClientPort}`, { method: request.method })
-
-    console.log(request.method, data, res.status)
-
-    if (res.status != 200) throw Error()
-
-    if (request.method == 'GET') {
-      const port = await res.text()
-      return new Response(port)
-    } else {
+    if (request.method === 'HEAD') {
       return new Response(null, { status: 200 })
+    } else if (request.method === 'GET' || request.method === 'POST') {
+      const [serverIP, ClientIPAndPort] = new URL(request.url).pathname.replace('/', '').split('/')
+      
+      console.log(request.method, serverIP, ClientIPAndPort)
+
+      const res = await fetch(`http://${serverIP}.nip.io/${ClientIPAndPort}`, { method: request.method })
+
+      if (res.status != 200) throw Error()
+
+      if (request.method == 'GET') {
+        const port = await res.text()
+        return new Response(port)
+      } else {
+        return new Response(null, { status: 200 })
+      }
+    } else {
+      return new Response(null, { status: 400 })
     }
   } catch (error) {
     console.log(error)
