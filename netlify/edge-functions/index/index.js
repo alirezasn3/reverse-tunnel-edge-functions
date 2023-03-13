@@ -1,6 +1,7 @@
 export default async request => {
   try {
     if (request.method === 'HEAD') {
+      console.log('new head req')
       return new Response(null, { status: 200 })
     } else if (request.method === 'GET' || request.method === 'POST') {
       const [serverIP, ClientIPAndPort] = new URL(request.url).pathname.replace('/', '').split('/')
